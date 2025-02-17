@@ -1,0 +1,10 @@
+1;Ki írta az "Édes Anna" című regényt?;Petőfi Sándor;Babits Mihály;Wesselényi Miklós;Kosztolányi Dezső
+2;Mikor jelent meg a regény?;1972;1914;1922;1926
+3;Mi Édes Anna foglalkozása?;Cukrász;Pénztáros;Tanító;Szolgálólány
+4;Kikhez kerül szolgálónak Édes Anna?;Kovács család;Az orvoshoz;Petrovics család;Vizy család
+5;Hogyan bánik vele Vizyné?;Mintha a saját lánya lenne;Nem is figyel rá;Mintha Jancsi barátnője lenne;Embertelenül
+6;Milyen tragikus esemény történik a regény végén?;Anna öngyilkos lesz;Anna megszökik;Anna betegsége miatt elhuny;Anna megöli Vizynét és férjét
+7;Hova kerül Édes Anna a gyilkosság után?;Szüleihez;Moviszter orvos magához veszi;Ficsor magához veszi;Börtönbe
+8;Melyik városban játszódik a regény?;Debrecen;Miskolc;Szeged;Budapest
+9;Mi volt Vizy Kornél foglalkozása?;Rendőrtiszt;Polgármester;Ügyvéd;Főtisztviselő
+10;Milyen évszakban kezdődik a regény?;Tavasz;Ősz;Tél;Nyár
