@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using IrodalomProjekt.Models;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +17,20 @@ namespace IrodalomProjekt
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static List<Kerdes> kerdesek=new List<Kerdes>();
+        private static int aktualisIndex = 0;
         public MainWindow()
         {
             InitializeComponent();
+            
+
+        }
+
+        public static void KerdesekFeltoltese(string fileName)
+        {
+            { 
+
+            }
         }
 
         private void BetoltesClick(object sender, RoutedEventArgs e)
@@ -32,6 +44,21 @@ namespace IrodalomProjekt
         }
 
         private void KilepesClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ElozoClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ValaszMeneseClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void KovetkezoClick(object sender, RoutedEventArgs e)
         {
 
         }
