@@ -9,13 +9,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Linq;
+using System.IO;
+using System.Linq.Expressions;
+using Microsoft.Win32;
+
 
 namespace IrodalomProjekt
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
+
     public partial class MainWindow : Window
-    /// </summary>
     {
         private static List<Kerdes> kerdesek = new List<Kerdes>();
         private static int aktualisIndex = 0;
@@ -23,16 +26,47 @@ namespace IrodalomProjekt
         {
             InitializeComponent();
         }
-        private void KerdesBetoltes(string fileName)
+
+        private static void KerdeseketFeltolt(string fileName)
+        {
+            kerdesek.Clear();
+            try
+            {
+                using (StreamReader sr = new StreamReader(fileName, Encoding.UTF8))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string kerdesSzovege = sr.ReadLine();
+                        string valaszA = sr.ReadLine();
+                        string valaszB = sr.ReadLine();
+                        string valaszC = sr.ReadLine();
+                        string[] utolsoSor = sr.ReadLine().Split(' ');
+
+                        if (utolsoSor.Length < 3)
+                            continue;
+
+                        string helyesValasz = utolsoSor[2];
+
+                        kerdesek.Add(new Kerdes(kerdesSzovege, valaszA, valaszB, valaszC, helyesValasz));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Hiba történt a fájl beolvasása közben: " + ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BetoltesClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "TXT fájlok (*.txt)|*.txt";
+            openFileDialog.Filter = "TXT Fájlok (*.txt)|*.txt";
             if (openFileDialog.ShowDialog() == true)
             {
                 try
                 {
-                    KerdesBetoltes(openFileDialog.FileName);
-                    MessageBox.Show("Sikeres betöltés!", "Információ", MessageBoxButton.OK);
+                    KerdeseketFeltolt(openFileDialog.FileName);
+                    MessageBox.Show("Sikeres Betöltés!", "Információ", MessageBoxButton.OK, MessageBoxImage.Information);
                     if (kerdesek.Count > 0)
                     {
                         aktualisIndex = 0;
@@ -41,46 +75,26 @@ namespace IrodalomProjekt
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Hiba történt a fájl betöltése közben: {ex.Message}");
+                    MessageBox.Show(ex.Message, "Hiba", MessageBoxButton.OK, MessageBoxImage.Error);
+
                 }
             }
-
         }
 
         private void MutatKerdes(int index)
         {
-            Kerdes kerdes = kerdesek[index];
-            tbkKerdesSzövege.Text = kerdes.KerdesSzovege;
-            ValaszA.Content = kerdes.ValaszA;
-            ValaszB.Content = kerdes.ValaszB;
-            ValaszC.Content = kerdes.ValaszC;
-            switch(kerdes.FelhasznaloValasza)
-            {
-                case "A":
-                    ValaszA.IsChecked = true;
-                    ValaszB.isChecked = false;
-                    ValaszC.isChecked = false;
-                    break;
-                case "B":
-                    ValaszB.IsChecked = true;
-                    ValaszA.isChecked = false;
-                    ValaszC.isChecked = false;
-                    break;
-                case "C":
-                    ValaszC.IsChecked = true;
-                    ValaszA.isChecked = false;
-                    ValaszB.isChecked = false;
-                    break;
-                default:
-                    ValaszA.IsChecked = false;
-                    ValaszB.IsChecked = false;
-                    ValaszC.IsChecked = false;
-                    break;
-            }
-        }
-        private void BetoltesClick(object sender, RoutedEventArgs e)
-        {
+            if (kerdesek.Count == 0 || index < 0 || index >= kerdesek.Count)
+                return;
 
+            var aktualisKerdes = kerdesek[index];
+            tbkKerdesSzovege.Text = aktualisKerdes.KerdesSzoveg;
+            ValaszA.Content = "A: " + aktualisKerdes.ValaszA;
+            ValaszB.Content = "B: " + aktualisKerdes.ValaszB;
+            ValaszC.Content = "C: " + aktualisKerdes.ValaszC;
+
+            ValaszA.IsChecked = aktualisKerdes.FelhasznaloValasza == "A";
+            ValaszB.IsChecked = aktualisKerdes.FelhasznaloValasza == "B";
+            ValaszC.IsChecked = aktualisKerdes.FelhasznaloValasza == "C";
         }
 
         private void KiertekelesClick(object sender, RoutedEventArgs e)
@@ -95,17 +109,43 @@ namespace IrodalomProjekt
 
         private void ElozoClick(object sender, RoutedEventArgs e)
         {
-
+            if (aktualisIndex > 0)
+            {
+                ValaszMenteseClick(sender, e);
+                aktualisIndex--;
+                MutatKerdes(aktualisIndex);
+            }
         }
 
-        private void ValaszMeneseClick(object sender, RoutedEventArgs e)
+        private void ValaszMenteseClick(object sender, RoutedEventArgs e)
         {
-
+            if (aktualisIndex < kerdesek.Count)
+            {
+                if (ValaszA.IsChecked == true)
+                {
+                    kerdesek[aktualisIndex].FelhasznaloValasza = "A";
+                }
+                else if (ValaszB.IsChecked == true)
+                {
+                    kerdesek[aktualisIndex].FelhasznaloValasza = "B";
+                }
+                else if (ValaszC.IsChecked == true)
+                {
+                    kerdesek[aktualisIndex].FelhasznaloValasza = "C";
+                }
+            }
+            MessageBox.Show("Válasz mentve!", "Információ");
         }
+
 
         private void KovetkezoClick(object sender, RoutedEventArgs e)
         {
-
+            if (aktualisIndex < kerdesek.Count - 1)
+            {
+                ValaszMenteseClick(sender, e);
+                aktualisIndex++;
+                MutatKerdes(aktualisIndex);
+            }
         }
     }
 }
