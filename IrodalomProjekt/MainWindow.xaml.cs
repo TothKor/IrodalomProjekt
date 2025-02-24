@@ -17,22 +17,54 @@ namespace IrodalomProjekt
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static List<Kerdes> kerdesek=new List<Kerdes>();
+        private static List<Kerdes> kerdesek = new List<Kerdes>();
         private static int aktualisIndex = 0;
         public MainWindow()
         {
             InitializeComponent();
-            
+        }
+        private void KerdesBetoltes(string fileName)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "TXT fájlok (*.txt)|*.txt";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    KerdesBetoltes(openFileDialog.FileName);
+                    MessageBox.Show("Sikeres betöltés!", "Információ", MessageBoxButton.OK);
+                    if (kerdesek.Count > 0)
+                    {
+                        aktualisIndex = 0;
+                        MutatKerdes(aktualisIndex);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Hiba történt a fájl betöltése közben: {ex.Message}");
+                }
+            }
 
         }
 
-        public static void KerdesekFeltoltese(string fileName)
+        private void MutatKerdes(int aktualisIndex)
         {
-            { 
+            if (kerdesek.Count > 0 && aktualisIndex >= 0 && aktualisIndex < kerdesek.Count)
+            {
+                var kerdes = kerdesek[aktualisIndex];
+                KerdesTextBlock.Text = kerdes.Kerdelem;
+                ValaszPanel.Children.Clear();
 
+                foreach (var valasz in kerdes.Valaszok)
+                {
+                    RadioButton rb = new RadioButton
+                    {
+                        Content = valasz
+                    };
+                    ValaszPanel.Children.Add(rb);
+                }
             }
         }
-
         private void BetoltesClick(object sender, RoutedEventArgs e)
         {
 
