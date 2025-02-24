@@ -14,8 +14,8 @@ namespace IrodalomProjekt
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
+    /// </summary>
     {
         private static List<Kerdes> kerdesek = new List<Kerdes>();
         private static int aktualisIndex = 0;
@@ -47,22 +47,35 @@ namespace IrodalomProjekt
 
         }
 
-        private void MutatKerdes(int aktualisIndex)
+        private void MutatKerdes(int index)
         {
-            if (kerdesek.Count > 0 && aktualisIndex >= 0 && aktualisIndex < kerdesek.Count)
+            Kerdes kerdes = kerdesek[index];
+            tbkKerdesSzövege.Text = kerdes.KerdesSzovege;
+            ValaszA.Content = kerdes.ValaszA;
+            ValaszB.Content = kerdes.ValaszB;
+            ValaszC.Content = kerdes.ValaszC;
+            switch(kerdes.FelhasznaloValasza)
             {
-                var kerdes = kerdesek[aktualisIndex];
-                KerdesTextBlock.Text = kerdes.Kerdelem;
-                ValaszPanel.Children.Clear();
-
-                foreach (var valasz in kerdes.Valaszok)
-                {
-                    RadioButton rb = new RadioButton
-                    {
-                        Content = valasz
-                    };
-                    ValaszPanel.Children.Add(rb);
-                }
+                case "A":
+                    ValaszA.IsChecked = true;
+                    ValaszB.isChecked = false;
+                    ValaszC.isChecked = false;
+                    break;
+                case "B":
+                    ValaszB.IsChecked = true;
+                    ValaszA.isChecked = false;
+                    ValaszC.isChecked = false;
+                    break;
+                case "C":
+                    ValaszC.IsChecked = true;
+                    ValaszA.isChecked = false;
+                    ValaszB.isChecked = false;
+                    break;
+                default:
+                    ValaszA.IsChecked = false;
+                    ValaszB.IsChecked = false;
+                    ValaszC.IsChecked = false;
+                    break;
             }
         }
         private void BetoltesClick(object sender, RoutedEventArgs e)
